@@ -72,10 +72,19 @@ hi def link     gotplControl        Keyword
 hi def link     gotplFunctions      Function
 hi def link     goTplVariable       Special
 
-syn region gotplAction start="{{" end="}}" contains=@gotplLiteral,gotplControl,gotplFunctions,gotplVariable,goTplIdentifier display
-syn region gotplAction start="\[\[" end="\]\]" contains=@gotplLiteral,gotplControl,gotplFunctions,gotplVariable display
-syn region goTplComment start="{{/\*" end="\*/}}" display
-syn region goTplComment start="\[\[/\*" end="\*/\]\]" display
+if !exists("g:gotpl_deliml")
+  let g:gotpl_deliml  = "{{"
+endif
+
+if !exists("g:gotpl_delimr")
+  let g:gotpl_delimr = "}}"
+endif
+
+let s:comment_deliml  = g:gotpl_deliml . "/\*"
+let s:comment_delimr = "\*/" . g:gotpl_delimr
+
+execute 'syn region gotplAction start="'.g:gotpl_deliml.'" end="'.g:gotpl_delimr.'" contains=@gotplLiteral,gotplControl,gotplFunctions,gotplVariable,goTplIdentifier display'
+execute 'syn region goTplComment start="'.s:comment_deliml.'" end="'.s:comment_delimr.'" display'
 
 hi def link gotplAction PreProc
 hi def link goTplComment Comment
